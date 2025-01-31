@@ -7,6 +7,9 @@
 
 A dynamic to-do list that calculates priority based on due date, importance, and time to complete. This project aims to provide a user-friendly interface for managing tasks effectively.
 
+![image](https://github.com/user-attachments/assets/3acbae13-7a50-4ca7-88eb-f791f5c4ed9a)
+
+
 ## Features
 
 -   **Dynamic Priority Calculation**: Automatically calculates task priority based on due date, importance, and estimated time.
