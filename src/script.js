@@ -95,34 +95,43 @@ function adjustPriorityForDueToday(priority, weight) {
 
 function editTask(index) {
     const task = tasks[index];
+    const row = document.querySelector(`tr[data-index="${index}"]`);
+    if (!row) return;
 
-    const newName = prompt("Enter the new task name:", task.name);
-    if (newName === null) {
-        // User clicked Cancel
-        return;
-    }
+    const escapedName = task.name.replace(/"/g, '&quot;');
+    row.innerHTML = `
+        <td><input type="checkbox" disabled ${task.completed ? 'checked' : ''}></td>
+        <td><input type="text" id="edit-name-${index}" value="${escapedName}"></td>
+        <td><input type="number" id="edit-weight-${index}" value="${task.weight}" min="1" max="10"></td>
+        <td><input type="date" id="edit-duedate-${index}" value="${task.dueDate || ''}"></td>
+        <td><input type="number" id="edit-time-${index}" value="${task.estimatedTime}" min="1"></td>
+        <td class="${getPriorityClass(task)}">${calculatePriority(task.weight, task.dueDate, task.estimatedTime, task.completed)}</td>
+        <td>
+            <button class="edit-button" onclick="saveEdit(${index})">Save</button>
+            <button class="delete-button" onclick="cancelEdit()">Cancel</button>
+        </td>`;
+}
 
-    const newWeight = parseInt(prompt("Enter the new importance (1-10):", task.weight));
-    if (isNaN(newWeight) || newWeight < 1 || newWeight > 10) {
-        alert("Please enter a valid importance between 1 and 10.");
-        return;
-    }
+function saveEdit(index) {
+    const newName = document.getElementById(`edit-name-${index}`).value.trim();
+    const newWeight = parseInt(document.getElementById(`edit-weight-${index}`).value);
+    const newDueDate = document.getElementById(`edit-duedate-${index}`).value;
+    const newEstimatedTime = parseInt(document.getElementById(`edit-time-${index}`).value);
 
-    const newDueDate = prompt("Enter the new due date (YYYY-MM-DD):", task.dueDate);
-    const newEstimatedTime = parseInt(prompt("Enter the new estimated time (hours):", task.estimatedTime));
+    if (!newName) { alert("Please enter a task name."); return; }
+    if (isNaN(newWeight) || newWeight < 1 || newWeight > 10) { alert("Please enter a valid importance between 1 and 10."); return; }
+    if (isNaN(newEstimatedTime) || newEstimatedTime <= 0) { alert("Please enter a valid estimated time greater than 0."); return; }
 
-    if (isNaN(newEstimatedTime) || newEstimatedTime <= 0) {
-        alert("Please enter a valid estimated time greater than 0.");
-        return;
-    }
-
-    // Update the task with new values
-    task.name = newName;
-    task.weight = newWeight;
-    task.dueDate = newDueDate || null;
-    task.estimatedTime = newEstimatedTime;
+    tasks[index].name = newName;
+    tasks[index].weight = newWeight;
+    tasks[index].dueDate = newDueDate || null;
+    tasks[index].estimatedTime = newEstimatedTime;
 
     saveTasks();
+    displayTasks();
+}
+
+function cancelEdit() {
     displayTasks();
 }
 
@@ -151,22 +160,33 @@ function displayTasks() {
 
     sortedTasks.forEach(task => {
         const row = document.createElement("tr");
+        const taskIndex = tasks.indexOf(task);
+        row.setAttribute('data-index', taskIndex);
 
+        if (!task.completed && task.dueDate && task.dueDate < new Date().toISOString().split('T')[0]) {
+            row.classList.add('overdue');
+        }
 
         let options = { year: 'numeric', month: '2-digit', day: '2-digit' };
 
-        row.innerHTML = `<td><input type="checkbox" onchange="toggleTaskCompletion(${tasks.indexOf(task)})" ${task.completed ? 'checked' : ''}></td>
+        row.innerHTML = `<td><input type="checkbox" onchange="toggleTaskCompletion(${taskIndex})" ${task.completed ? 'checked' : ''}></td>
         <td>${task.name}</td>
         <td>${task.weight}</td>
         <td>${task.dueDate ? new Date(task.dueDate).toLocaleDateString('en-GB', options) : "N/A"}</td>
         <td>${task.estimatedTime} hours</td>
         <td class="${getPriorityClass(task)}">${calculatePriority(task.weight, task.dueDate, task.estimatedTime, task.completed)}</td>
         <td>
-        <button class="edit-button" onclick="editTask(${tasks.indexOf(task)})">Edit</button>
-        <button class="delete-button" onclick="deleteTask(${tasks.indexOf(task)})">Delete</button>
+        <button class="edit-button" onclick="editTask(${taskIndex})">Edit</button>
+        <button class="delete-button" onclick="deleteTask(${taskIndex})">Delete</button>
     </td>`;
         taskTableBody.appendChild(row);
     });
+
+    if (tasks.length === 0) {
+        const row = document.createElement('tr');
+        row.innerHTML = `<td colspan="7" style="text-align:center; color:#999;">No tasks yet. Add one above.</td>`;
+        taskTableBody.appendChild(row);
+    }
 }
 
 // function to check if a task is completed

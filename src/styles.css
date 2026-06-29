@@ -122,3 +122,19 @@ button.edit-button {
     margin: 0 8px 16px;
 }
 
+td input[type="text"], td input[type="number"], td input[type="date"] {
+    width: 90%;
+    padding: 4px;
+    margin-bottom: 0;
+    box-sizing: border-box;
+}
+
+tr.overdue td {
+    background-color: #fff3f3;
+}
+
+tr.overdue td:nth-child(4) {
+    color: #e53935;
+    font-weight: bold;
+}
+
