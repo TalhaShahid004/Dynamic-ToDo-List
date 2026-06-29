@@ -142,8 +142,8 @@ function displayTasks() {
         }
     });
 
-    // Sort tasks by priority
-    const sortedTasks = [...incompleteTasks, ...completedTasks].sort((a, b) => {
+    const showIncompleteOnly = document.getElementById('showIncompleteOnly')?.checked;
+    const sortedTasks = [...incompleteTasks, ...(showIncompleteOnly ? [] : completedTasks)].sort((a, b) => {
         const priorityA = calculatePriority(a.weight, a.dueDate, a.estimatedTime, a.completed);
         const priorityB = calculatePriority(b.weight, b.dueDate, b.estimatedTime, b.completed);
         return priorityB - priorityA; // Sort in descending order

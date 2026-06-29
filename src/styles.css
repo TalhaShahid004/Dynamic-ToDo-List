@@ -118,3 +118,7 @@ button.edit-button {
     margin-right: 5px; /* Keep margin on the right for the Edit button */
 }
 
+#showIncompleteOnly {
+    margin: 0 8px 16px;
+}
+
