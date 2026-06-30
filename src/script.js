@@ -315,3 +315,30 @@ function saveTasks() {
 
 // Display tasks when the page loads
 displayTasks();
+
+if (typeof document.addEventListener === 'function') document.addEventListener('keydown', function (e) {
+    const tag = document.activeElement.tagName;
+    const isEditing = tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT';
+
+    // "n" focuses the task name input
+    if (e.key === 'n' && !isEditing && !e.ctrlKey && !e.metaKey && !e.altKey) {
+        e.preventDefault();
+        document.getElementById('taskName')?.focus();
+        return;
+    }
+
+    // Escape cancels any active inline edit
+    if (e.key === 'Escape') {
+        const editRow = document.querySelector('tr input[id^="edit-name-"]');
+        if (editRow) {
+            cancelEdit();
+        }
+        return;
+    }
+
+    // Ctrl+Enter submits the add-task form
+    if (e.key === 'Enter' && e.ctrlKey) {
+        e.preventDefault();
+        document.getElementById('taskForm')?.requestSubmit();
+    }
+});
