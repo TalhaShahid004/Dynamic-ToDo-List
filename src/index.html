@@ -6,9 +6,9 @@
     <title>Talha's Dynamic ToDo List</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="shortcut icon" type="x-icon" href="todo.ico">
-
 </head>
 <body>
+    <button id="theme-toggle">Dark Mode</button>
     <h1>Talha's Dynamic 'Get To Do' List</h1>
 
     <form id="taskForm">
@@ -42,10 +42,25 @@
                 <th data-sort="priority">Priority</th>
                 <th>Action</th>
             </tr>
-        </thead>           
+        </thead>
         <tbody id="taskTableBody"></tbody>
     </table>
 
     <script src="script.js"></script>
+    <script>
+    (function () {
+        var btn = document.getElementById('theme-toggle');
+        var saved = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', saved);
+        btn.textContent = saved === 'dark' ? 'Light Mode' : 'Dark Mode';
+        btn.addEventListener('click', function () {
+            var current = document.documentElement.getAttribute('data-theme');
+            var next = current === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', next);
+            localStorage.setItem('theme', next);
+            btn.textContent = next === 'dark' ? 'Light Mode' : 'Dark Mode';
+        });
+    })();
+    </script>
 </body>
 </html>

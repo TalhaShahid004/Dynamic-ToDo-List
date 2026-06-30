@@ -1,6 +1,43 @@
+:root {
+    --color-bg: #f7f7f7;
+    --color-surface: #fff;
+    --color-surface-alt: #f2f2f2;
+    --color-border: #ddd;
+    --color-text: #333;
+    --color-text-inverse: #fff;
+    --color-accent: #3498db;
+    --color-green: #4caf50;
+    --color-delete: #e53935;
+    --color-priority-highest: #e53935;
+    --color-priority-high: #ff8f00;
+    --color-priority-medium: #faab33;
+    --color-overdue-bg: #fff3f3;
+    --color-overdue-date: #e53935;
+    --color-shadow: rgba(0, 0, 0, 0.1);
+}
+
+[data-theme="dark"] {
+    --color-bg: #121212;
+    --color-surface: #1e1e1e;
+    --color-surface-alt: #2a2a2a;
+    --color-border: #444;
+    --color-text: #e0e0e0;
+    --color-text-inverse: #fff;
+    --color-accent: #5aace0;
+    --color-green: #66bb6a;
+    --color-delete: #ef5350;
+    --color-priority-highest: #ef5350;
+    --color-priority-high: #ffa726;
+    --color-priority-medium: #ffcc02;
+    --color-overdue-bg: #2d1515;
+    --color-overdue-date: #ef5350;
+    --color-shadow: rgba(0, 0, 0, 0.4);
+}
+
 body {
     font-family: 'Arial', sans-serif;
-    background-color: #f7f7f7;
+    background-color: var(--color-bg);
+    color: var(--color-text);
     margin: 0;
     padding: 0;
     display: flex;
@@ -13,9 +50,9 @@ body {
 h1 {
     font-family: 'YourCoolFont', sans-serif;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
-    color: #fff;
-    background-color: #3498db; 
-    padding: 10px; 
+    color: var(--color-text-inverse);
+    background-color: var(--color-accent);
+    padding: 10px;
     font-size: 28px;
     letter-spacing: 1px;
 }
@@ -27,10 +64,10 @@ td button {
 @import url('https://fonts.googleapis.com/css2?family=YourCoolFont&display=swap');
 
 form {
-    background-color: #fff;
+    background-color: var(--color-surface);
     padding: 20px;
     border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 8px var(--color-shadow);
     margin-bottom: 20px;
     width: 300px;
 }
@@ -38,7 +75,7 @@ form {
 label {
     display: block;
     margin-bottom: 5px;
-    color: #333;
+    color: var(--color-text);
 }
 
 input {
@@ -46,11 +83,14 @@ input {
     padding: 8px;
     margin-bottom: 10px;
     box-sizing: border-box;
+    background-color: var(--color-surface);
+    color: var(--color-text);
+    border: 1px solid var(--color-border);
 }
 
 button {
-    background-color: #4caf50;
-    color: #fff;
+    background-color: var(--color-green);
+    color: var(--color-text-inverse);
     padding: 10px;
     border: none;
     border-radius: 4px;
@@ -64,43 +104,43 @@ table {
 }
 
 th, td {
-    border: 1px solid #ddd;
+    border: 1px solid var(--color-border);
     padding: 12px;
     text-align: left;
 }
 
 th {
-    background-color: #4caf50;
-    color: #fff;
+    background-color: var(--color-green);
+    color: var(--color-text-inverse);
 }
 
 tbody tr:nth-child(even) {
-    background-color: #f2f2f2;
+    background-color: var(--color-surface-alt);
 }
 
 .priority-highest {
-    color: #e53935; 
+    color: var(--color-priority-highest);
 }
 
 .priority-high {
-    color: #ff8f00; 
+    color: var(--color-priority-high);
 }
 
 .priority-medium {
-    color: #faab33;
+    color: var(--color-priority-medium);
 }
 
 .priority-low {
-    color: #4caf50; 
+    color: var(--color-green);
 }
 
 .completed-task {
-    color: #333; 
+    color: var(--color-text);
 }
 
 button.delete-button, button.edit-button {
-    background-color: #4caf50;
-    color: #fff;
+    background-color: var(--color-green);
+    color: var(--color-text-inverse);
     padding: 10px;
     border: none;
     border-radius: 4px;
@@ -109,13 +149,13 @@ button.delete-button, button.edit-button {
 }
 
 button.delete-button {
-    background-color: #e53935; 
+    background-color: var(--color-delete);
     margin-left: auto;
-    margin-right: 0; /* Remove margin on the right for the Delete button */
+    margin-right: 0;
 }
 
 button.edit-button {
-    margin-right: 5px; /* Keep margin on the right for the Edit button */
+    margin-right: 5px;
 }
 
 #showIncompleteOnly {
@@ -130,11 +170,24 @@ td input[type="text"], td input[type="number"], td input[type="date"] {
 }
 
 tr.overdue td {
-    background-color: #fff3f3;
+    background-color: var(--color-overdue-bg);
 }
 
 tr.overdue td:nth-child(4) {
-    color: #e53935;
+    color: var(--color-overdue-date);
     font-weight: bold;
 }
 
+#theme-toggle {
+    position: fixed;
+    top: 12px;
+    right: 16px;
+    background-color: var(--color-surface);
+    color: var(--color-text);
+    border: 1px solid var(--color-border);
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    z-index: 1000;
+}
