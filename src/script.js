@@ -1,5 +1,74 @@
 const tasks = loadTasks();
 
+const sortState = { column: 'priority', direction: 'desc' };
+
+const sortColumnLabels = {
+    name: 'Task Name',
+    weight: 'Importance',
+    dueDate: 'Due Date',
+    estimatedTime: 'Estimated Time',
+    priority: 'Priority'
+};
+
+function getSortValue(task, column) {
+    if (column === 'priority') {
+        const priority = calculatePriority(task.weight, task.dueDate, task.estimatedTime, task.completed);
+        return priority === '-' ? -Infinity : priority;
+    }
+    if (column === 'name') {
+        return task.name.toLowerCase();
+    }
+    return task[column];
+}
+
+function compareTasks(a, b, column, direction) {
+    if (column === 'dueDate') {
+        if (!a.dueDate && !b.dueDate) return 0;
+        if (!a.dueDate) return 1;
+        if (!b.dueDate) return -1;
+    }
+
+    const valueA = getSortValue(a, column);
+    const valueB = getSortValue(b, column);
+
+    let result;
+    if (typeof valueA === 'string') {
+        result = valueA.localeCompare(valueB);
+    } else {
+        result = valueA - valueB;
+    }
+
+    return direction === 'asc' ? result : -result;
+}
+
+function updateSortHeaders() {
+    document.querySelectorAll('th[data-sort]').forEach(th => {
+        const column = th.getAttribute('data-sort');
+        const label = sortColumnLabels[column] || column;
+        if (sortState.column === column) {
+            th.textContent = `${label} ${sortState.direction === 'asc' ? '▲' : '▼'}`;
+        } else {
+            th.textContent = label;
+        }
+    });
+}
+
+function initSortHandlers() {
+    document.querySelectorAll('th[data-sort]').forEach(th => {
+        th.style.cursor = 'pointer';
+        th.addEventListener('click', () => {
+            const column = th.getAttribute('data-sort');
+            if (sortState.column === column) {
+                sortState.direction = sortState.direction === 'asc' ? 'desc' : 'asc';
+            } else {
+                sortState.column = column;
+                sortState.direction = 'asc';
+            }
+            displayTasks();
+        });
+    });
+}
+
 function calculatePriority(weight, dueDate, estimatedTime, completed) {
     if (completed) {
         return '-';
@@ -140,23 +209,12 @@ function displayTasks() {
     const taskTableBody = document.getElementById("taskTableBody");
     taskTableBody.innerHTML = "";
 
-    const completedTasks = [];
-    const incompleteTasks = [];
-
-    tasks.forEach(task => {
-        if (task.completed) {
-            completedTasks.push(task);
-        } else {
-            incompleteTasks.push(task);
-        }
-    });
+    updateSortHeaders();
 
     const showIncompleteOnly = document.getElementById('showIncompleteOnly')?.checked;
-    const sortedTasks = [...incompleteTasks, ...(showIncompleteOnly ? [] : completedTasks)].sort((a, b) => {
-        const priorityA = calculatePriority(a.weight, a.dueDate, a.estimatedTime, a.completed);
-        const priorityB = calculatePriority(b.weight, b.dueDate, b.estimatedTime, b.completed);
-        return priorityB - priorityA; // Sort in descending order
-    });
+    const sortedTasks = tasks
+        .filter(task => !showIncompleteOnly || !task.completed)
+        .sort((a, b) => compareTasks(a, b, sortState.column, sortState.direction));
 
     sortedTasks.forEach(task => {
         const row = document.createElement("tr");
@@ -333,6 +391,7 @@ function saveTasks() {
 }
 
 // Display tasks when the page loads
+initSortHandlers();
 displayTasks();
 
 if (typeof document.addEventListener === 'function') document.addEventListener('keydown', function (e) {
