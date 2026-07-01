@@ -95,6 +95,16 @@ button {
     border: none;
     border-radius: 4px;
     cursor: pointer;
+    transition: background-color 0.15s ease, transform 0.1s ease, box-shadow 0.15s ease;
+}
+
+button:hover {
+    filter: brightness(1.1);
+    box-shadow: 0 2px 6px var(--color-shadow);
+}
+
+button:active {
+    transform: translateY(1px);
 }
 
 table {
@@ -118,20 +128,33 @@ tbody tr:nth-child(even) {
     background-color: var(--color-surface-alt);
 }
 
+tbody tr {
+    transition: background-color 0.15s ease;
+}
+
+tbody tr:hover {
+    background-color: var(--color-surface-alt);
+    filter: brightness(0.97);
+}
+
 .priority-highest {
     color: var(--color-priority-highest);
+    font-weight: 700;
 }
 
 .priority-high {
     color: var(--color-priority-high);
+    font-weight: 600;
 }
 
 .priority-medium {
     color: var(--color-priority-medium);
+    font-weight: 600;
 }
 
 .priority-low {
     color: var(--color-green);
+    font-weight: 500;
 }
 
 .completed-task {
@@ -146,12 +169,17 @@ button.delete-button, button.edit-button {
     border-radius: 4px;
     cursor: pointer;
     display: inline-block;
+    transition: background-color 0.15s ease, transform 0.1s ease, box-shadow 0.15s ease;
 }
 
 button.delete-button {
     background-color: var(--color-delete);
     margin-left: auto;
     margin-right: 0;
+}
+
+button.delete-button:hover {
+    box-shadow: 0 2px 6px var(--color-shadow);
 }
 
 button.edit-button {
@@ -171,6 +199,16 @@ td input[type="text"], td input[type="number"], td input[type="date"] {
 
 tr.overdue td {
     background-color: var(--color-overdue-bg);
+    border-top-color: var(--color-overdue-date);
+    border-bottom-color: var(--color-overdue-date);
+}
+
+tr.overdue:hover td {
+    filter: brightness(0.97);
+}
+
+tr.overdue td:first-child {
+    border-left: 3px solid var(--color-overdue-date);
 }
 
 tr.overdue td:nth-child(4) {
@@ -190,4 +228,129 @@ tr.overdue td:nth-child(4) {
     cursor: pointer;
     font-size: 14px;
     z-index: 1000;
+    transition: background-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+#theme-toggle:hover {
+    box-shadow: 0 2px 6px var(--color-shadow);
+}
+
+@media (max-width: 768px) {
+    body {
+        padding: 0 12px;
+    }
+
+    h1 {
+        font-size: 22px;
+        padding: 8px;
+        width: 100%;
+        box-sizing: border-box;
+        text-align: center;
+    }
+
+    form {
+        width: 100%;
+        max-width: 400px;
+    }
+
+    table {
+        width: 100%;
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+
+    th, td {
+        padding: 8px;
+    }
+
+    #theme-toggle {
+        top: 8px;
+        right: 8px;
+        padding: 4px 8px;
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    h1 {
+        font-size: 18px;
+        letter-spacing: 0;
+    }
+
+    form {
+        padding: 12px;
+    }
+
+    button {
+        padding: 8px;
+        width: 100%;
+    }
+
+    button.delete-button, button.edit-button {
+        width: auto;
+        padding: 8px;
+    }
+
+    th, td {
+        padding: 6px;
+        font-size: 13px;
+    }
+}
+
+@media print {
+    body {
+        display: block;
+        background: #fff;
+        color: #000;
+        min-height: auto;
+    }
+
+    h1 {
+        background-color: transparent;
+        color: #000;
+        text-shadow: none;
+        box-shadow: none;
+    }
+
+    form,
+    label,
+    #theme-toggle,
+    button.delete-button,
+    button.edit-button,
+    td button {
+        display: none;
+    }
+
+    table {
+        width: 100%;
+        box-shadow: none;
+    }
+
+    th {
+        background-color: transparent;
+        color: #000;
+        border-bottom: 2px solid #000;
+    }
+
+    th, td {
+        border-color: #000;
+        color: #000;
+    }
+
+    tbody tr:nth-child(even) {
+        background-color: transparent;
+    }
+
+    tr.overdue td {
+        background-color: transparent;
+        border-left: 3px solid #000;
+    }
+
+    .priority-highest,
+    .priority-high,
+    .priority-medium,
+    .priority-low {
+        color: #000;
+    }
 }
