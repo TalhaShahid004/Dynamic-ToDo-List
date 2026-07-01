@@ -295,6 +295,25 @@ function clearTasks() {
     }
 }
 
+function clearCompletedTasks() {
+    const completedCount = tasks.filter(task => task.completed).length;
+    if (completedCount === 0) {
+        alert("No completed tasks to clear.");
+        return;
+    }
+
+    const confirmation = confirm(`Are you sure you want to clear ${completedCount} completed task(s)?`);
+    if (confirmation) {
+        for (let i = tasks.length - 1; i >= 0; i--) {
+            if (tasks[i].completed) {
+                tasks.splice(i, 1);
+            }
+        }
+        saveTasks();
+        displayTasks();
+    }
+}
+
 function loadTasks() {
     try {
         const data = localStorage.getItem('tasks');
@@ -339,6 +358,6 @@ if (typeof document.addEventListener === 'function') document.addEventListener('
     // Ctrl+Enter submits the add-task form
     if (e.key === 'Enter' && e.ctrlKey) {
         e.preventDefault();
-        document.getElementById('taskForm')?.requestSubmit();
+        addTask();
     }
 });
