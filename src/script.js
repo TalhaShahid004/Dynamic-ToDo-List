@@ -391,8 +391,10 @@ function saveTasks() {
 }
 
 // Display tasks when the page loads
-initSortHandlers();
-displayTasks();
+if (typeof document !== 'undefined' && document.querySelectorAll) {
+    initSortHandlers();
+    displayTasks();
+}
 
 if (typeof document.addEventListener === 'function') document.addEventListener('keydown', function (e) {
     const tag = document.activeElement.tagName;
