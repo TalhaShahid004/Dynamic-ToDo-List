@@ -33,6 +33,13 @@
 
     <button type="button" id="clearCompletedButton" onclick="clearCompletedTasks()">Clear Completed Tasks</button>
 
+    <button type="button" id="exportTasksButton" onclick="exportTasks()" style="margin-left: 8px; padding: 6px 12px; background-color: #4CAF50; color: white; border: none; border-radius: 4px; cursor: pointer;">Export Tasks</button>
+
+    <label for="importTasksInput" style="margin-left: 8px; padding: 6px 12px; background-color: #2196F3; color: white; border-radius: 4px; cursor: pointer; display: inline-block;">
+        Import Tasks
+        <input type="file" id="importTasksInput" accept="application/json" onchange="importTasks(event)" style="display: none;">
+    </label>
+
     <table>
         <thead>
             <tr>
@@ -49,6 +56,7 @@
     </table>
 
     <script src="script.js"></script>
+    <script src="importExport.js"></script>
     <script>
     (function () {
         var btn = document.getElementById('theme-toggle');
